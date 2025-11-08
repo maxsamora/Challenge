@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Step 1</title>
+<style>body{font-family:Arial;max-width:720px;margin:40px auto;padding:0 18px}button{padding:8px 12px}</style>
+</head>
+<body>
+  <h2>Step 1</h2>
+  <p>Question: What color always makes you smile?</p>
+  <input id="ans" placeholder="Type a color..." autofocus>
+  <div style="margin-top:12px">
+    <button onclick="check()">Next</button>
+  </div>
+  <p id="msg" style="color:#c00"></p>
+
+<script>
+function normalize(s){return s.trim().toLowerCase();}
+function check(){
+  const v = normalize(document.getElementById('ans').value);
+  // accept multiple possible answers
+  const allowed = ['blue','red','pink','yellow','green','purple','blueish','sky blue','rose'];
+  if(!v){ document.getElementById('msg').textContent = 'Please type something :)'; return;}
+  if(allowed.includes(v) || v.length<=8){
+    // proceed
+    window.location.href = 'step2.html';
+  } else {
+    document.getElementById('msg').textContent = "Hmm, that’s unexpected — try a different colour (or keep it simple).";
+  }
+}
+</script>
+</body></html>

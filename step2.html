@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Step 2</title>
+<style>body{font-family:Arial;max-width:720px;margin:40px auto;padding:0 18px}button{padding:8px 12px}</style>
+</head>
+<body>
+  <h2>Step 2 — Clue</h2>
+  <p>Clue: “I warm you when you sleep, I hold your secrets at night; when it’s cold you keep me close.”</p>
+  <p>Type the word that fits the clue:</p>
+  <input id="a2" placeholder="one word..." autofocus>
+  <div style="margin-top:12px"><button onclick="check2()">Continue</button></div>
+  <p id="m2" style="color:#c00"></p>
+
+<script>
+function n(s){return s.trim().toLowerCase();}
+function check2(){
+  const v = n(document.getElementById('a2').value);
+  const ok = ['blanket','comforter','blanket.','blanket!','duvet'];
+  if(!v){ document.getElementById('m2').textContent='Please answer.'; return;}
+  if(ok.includes(v)){
+    // small animation then final
+    window.location.href='final.html';
+  } else {
+    document.getElementById('m2').textContent='Almost — try a cozy item (one word).';
+  }
+}
+</script>
+</body></html>
