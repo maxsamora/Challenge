@@ -2,65 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hack my heart ❤️</title>
+  <title>Hack My Heart ❤️</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 18px; }
-    .card { background: #fff; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,.06); padding: 20px; }
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #0f0;
+      overflow: hidden;
+      margin: 0;
+      height: 100vh;
+    }
+    #terminal {
+      white-space: pre-wrap;
+      padding: 20px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    #quiz-container {
+      display: none;
+      background: #fff;
+      color: #000;
+      font-family: Arial, sans-serif;
+      max-width: 720px;
+      margin: 50px auto;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.2);
+    }
     .q { margin-bottom: 18px; font-size: 1.1rem; }
     input { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
     button { margin-top: 14px; padding: 10px 14px; border: none; background: #e91e63; color: #fff; border-radius: 6px; cursor: pointer; font-size: 1rem; }
-    #result { margin-top: 22px; font-weight: bold; }
-    .hidden { display: none; }
+    #feedback { color: #c00; font-weight: bold; }
+    #final { display: none; text-align: center; }
+    #hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
   </style>
 </head>
 <body>
-  <h1>🎯 Hack Game</h1>
-  <p>Answer everything correctly to reveal who sent you the flowers 💐</p>
+  <div id="terminal"></div>
 
-  <div class="card" id="quiz">
-    <div class="q" id="qtext"></div>
-    <input id="answer" placeholder="type your answer..." autocomplete="off">
-    <button onclick="check()">Send</button>
-    <p id="feedback" style="color:#c00"></p>
+  <div id="quiz-container">
+    <h1>🎯 Hack Game</h1>
+    <p>Answer everything correctly to reveal who sent you the flowers 💐</p>
+
+    <div id="quiz">
+      <div class="q" id="qtext"></div>
+      <input id="answer" placeholder="type your answer..." autocomplete="off">
+      <button onclick="check()">Send</button>
+      <p id="feedback"></p>
+    </div>
+
+    <div id="final">
+      <h2>💖 You hacked my heart!</h2>
+      <p>It was me — <strong>Maxwell</strong> 💌</p>
+      <p>Now you can message me 😎</p>
+    </div>
   </div>
 
-  <div id="final" class="hidden">
-    <h2>💖 You hacked my heart!</h2>
-    <p>It was me — <strong>Maxwell</strong> 💌</p>
-    <p>Now you can message me 😎</p>
-  </div>
+  <audio id="song" src="onedance.mp3" preload="auto"></audio>
+  <canvas id="hearts"></canvas>
 
 <script>
-const questions = [
-  {
-    q: "What is my country of origin?",
-    answers: ["brazil", "braZil", "Brasil"]
-  },
-  {
-    q: "Where do I live currently?",
-    answers: ["sydney"]
-  },
-  {
-    q: "How many siblings do I have?",
-    answers: ["3", "three"]
-  },
-  {
-    q: "What is my favorite color?",
-    answers: ["red", "vermelha"]
-  },
-  {
-    q: "What was the first gift you got from me?",
-    answers: ["friends socks", "socks friends", "meia friends", "friends sock"]
-  },
-  {
-    q: "What is the color of my body?",
-    answers: ["brown"]
-  },
-  {
-    q: "What is the first word that comes to your mind when you think of me?",
-    answers: ["gostoso"]
+const introText = [
+  "Initializing romantic protocol...",
+  "Bypassing firewalls of love ❤️...",
+  "Decrypting emotions...",
+  "Accessing secret feelings...",
+  "Connection established with your heart 💓",
+  "Access granted. Welcome, my secret admirer!"
+];
+
+const terminal = document.getElementById('terminal');
+let line = 0;
+
+function typeLine() {
+  if (line < introText.length) {
+    terminal.textContent += introText[line] + "\n";
+    line++;
+    setTimeout(typeLine, 1200);
+  } else {
+    setTimeout(() => {
+      document.body.style.backgroundColor = "#f5f5f5";
+      document.body.style.color = "#000";
+      terminal.style.display = "none";
+      document.getElementById('quiz-container').style.display = "block";
+      showQuestion();
+    }, 1500);
   }
+}
+
+window.onload = typeLine;
+
+const questions = [
+  { q: "What is my country of origin?", answers: ["brazil", "braZil", "brasil"] },
+  { q: "Where do I live currently?", answers: ["sydney"] },
+  { q: "How many siblings do I have?", answers: ["3", "three"] },
+  { q: "What is my favorite color?", answers: ["red", "vermelha"] },
+  { q: "What was the first gift you got from me?", answers: ["friends socks", "socks friends", "meia friends", "friends sock"] },
+  { q: "What is the color of my body?", answers: ["brown"] },
+  { q: "What is the first word that comes to your mind when you think of me?", answers: ["gostoso"] },
+  { q: "Which song reminds you of me?", answers: ["one dance", "drake one dance"] }
 ];
 
 let current = 0;
@@ -76,6 +117,69 @@ function normalize(str) {
   return str.trim().toLowerCase();
 }
 
+function playSong() {
+  const song = document.getElementById('song');
+  song.volume = 0.7;
+  song.play();
+}
+
+function launchConfetti() {
+  const canvas = document.getElementById('hearts');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const hearts = Array.from({ length: 40 }).map(() => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height,
+    size: Math.random() * 20 + 10,
+    speed: Math.random() * 2 + 1,
+    color: `hsl(${Math.random()*20 + 340}, 80%, 60%)`
+  }));
+
+  function drawHeart(x, y, size, color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    const topCurveHeight = size * 0.3;
+    ctx.moveTo(x, y + topCurveHeight);
+    ctx.bezierCurveTo(
+      x, y,
+      x - size / 2, y,
+      x - size / 2, y + topCurveHeight
+    );
+    ctx.bezierCurveTo(
+      x - size / 2, y + (size + topCurveHeight) / 2,
+      x, y + (size + topCurveHeight) / 1.3,
+      x, y + size
+    );
+    ctx.bezierCurveTo(
+      x, y + (size + topCurveHeight) / 1.3,
+      x + size / 2, y + (size + topCurveHeight) / 2,
+      x + size / 2, y + topCurveHeight
+    );
+    ctx.bezierCurveTo(
+      x + size / 2, y,
+      x, y,
+      x, y + topCurveHeight
+    );
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const heart of hearts) {
+      drawHeart(heart.x, heart.y, heart.size, heart.color);
+      heart.y += heart.speed;
+      if (heart.y > canvas.height + heart.size) heart.y = -heart.size;
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
 function check() {
   const user = normalize(document.getElementById('answer').value);
   const valid = questions[current].answers.map(a => a.trim().toLowerCase());
@@ -83,8 +187,10 @@ function check() {
   if (valid.includes(user)) {
     current++;
     if (current >= questions.length) {
-      document.getElementById('quiz').classList.add('hidden');
-      document.getElementById('final').classList.remove('hidden');
+      document.getElementById('quiz').style.display = "none";
+      document.getElementById('final').style.display = "block";
+      playSong();
+      launchConfetti();
     } else {
       showQuestion();
     }
@@ -92,8 +198,6 @@ function check() {
     document.getElementById('feedback').textContent = "Hmm... try again 😉";
   }
 }
-
-showQuestion();
 </script>
 </body>
 </html>
