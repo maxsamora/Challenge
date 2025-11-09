@@ -1,56 +1,131 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Friends Quiz — Secret Admirer 💐</title>
-<style>
-  :root {
-    --accent:#ffdd57;
-    --pink:#e1306c;
-  }
-  html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:#111;color:#fff;}
-  header{text-align:center;padding:24px 8px;font-family:'Trebuchet MS';letter-spacing:4px;}
-  header span{color:var(--accent);}
-  #game{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    min-height:calc(100vh - 80px);
-    background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.6)),url('bg-friends.jpg') center/cover no-repeat;
-    padding:20px;box-sizing:border-box;
-  }
-  .card{background:rgba(0,0,0,.65);padding:24px;border-radius:12px;max-width:720px;width:100%;box-shadow:0 0 30px rgba(0,0,0,.5);}
-  h1{margin-top:0;text-align:center;}
-  p{color:#ddd;}
-  .q{margin-bottom:12px;font-size:1.05rem;}
-  input{width:100%;padding:10px;border-radius:8px;border:none;background:#222;color:#fff;font-size:1rem;}
-  button{margin-top:12px;padding:10px 18px;background:var(--pink);color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
-  #feedback{color:#ffb3b3;margin-top:8px;}
-  #final{display:none;text-align:center;}
-  #insta{display:inline-block;margin-top:16px;padding:12px 18px;background:var(--accent);color:#000;border-radius:8px;text-decoration:none;font-weight:bold;}
-  canvas#hearts{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
-  #playbtn{position:fixed;right:16px;bottom:16px;background:rgba(0,0,0,.7);color:#fff;border:1px solid #555;border-radius:8px;padding:10px 12px;cursor:pointer;display:none;z-index:10000;}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Friends Quiz — Secret Flowers 💐</title>
+  <style>
+    :root {
+      --accent: #ffdd57;
+      --pink: #e1306c;
+      --text-light: #f0f0f0;
+    }
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #111;
+      color: var(--text-light);
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      letter-spacing: 4px;
+      font-size: 24px;
+      color: var(--accent);
+    }
+    #quiz-area {
+      position: relative;
+      min-height: calc(100vh - 80px);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      max-width: 720px;
+      margin: 0 auto;
+      background: rgba(0,0,0,0.65);
+      padding: 24px;
+      border-radius: 12px;
+    }
+    .q {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #222;
+      color: #fff;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button.btn {
+      margin-top: 12px;
+      padding: 10px 16px;
+      background: var(--pink);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #feedback {
+      margin-top: 8px;
+      color: #ff9e9e;
+      font-weight: bold;
+    }
+    #final {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    #final h2 {
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+    #insta {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: var(--accent);
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+    canvas#hearts {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    #playbtn {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      display: none;
+      z-index: 10000;
+    }
+  </style>
 </head>
 <body>
-<header><h2>F R I E N D S <span>Quiz</span></h2></header>
-
-<div id="game">
-  <div class="card">
+<header>F R I E N D S • Quiz</header>
+<div id="quiz-area">
+  <div class="card" id="quiz-card">
     <h1>Hey Solène!</h1>
-    <p>Can you prove you’re a true <strong>Friends</strong> fan?  
-    Answer all questions to reveal who sent you these flowers 💐</p>
-
+    <p>Answer these Friends-themed questions to find out who sent you these flowers 💐</p>
     <div id="quiz">
       <div class="q" id="qtext"></div>
       <input id="answer" type="text" placeholder="Type your answer..." autocomplete="off" />
-      <button onclick="check()">Submit</button>
+      <button class="btn" onclick="checkAnswer()">Submit</button>
       <p id="feedback"></p>
     </div>
-
     <div id="final">
-      <h2>🎉 You did it!</h2>
+      <h2>🎉 You cracked it!</h2>
       <p>It was me — <strong>Maxwell</strong> 💌</p>
-      <a id="insta" href="https://instagram.com/YOUR_INSTAGRAM" target="_blank">Visit my Instagram</a>
+      <a id="insta" href="https://instagram.com/YOUR_INSTAGRAM" target="_blank">Check my Instagram</a>
     </div>
   </div>
 </div>
@@ -60,54 +135,140 @@
 <canvas id="hearts"></canvas>
 
 <script>
-const song=document.getElementById("song"),btn=document.getElementById("playbtn");let playing=false;
-function tryPlay(){song.volume=0.7;const p=song.play();if(p!==undefined){p.then(()=>{playing=true;btn.style.display="none"}).catch(()=>{btn.style.display="block"})}}
-function forcePlay(){song.play().then(()=>{playing=true;btn.style.display="none"}).catch(()=>{})}
+// MUSIC AUTOPLAY + fallback
+const song = document.getElementById('song');
+const playbtn = document.getElementById('playbtn');
+let musicStarted = false;
 
-/* FRIENDS QUIZ QUESTIONS */
-const questions=[
- {q:"What is the name of Ross and Monica’s dog when they were kids?",answers:["chi-chi","chi chi"]},
- {q:"What is the name of Joey’s stuffed penguin?",answers:["huggsy","hugsie"]},
- {q:"What does Chandler do for a living?",answers:["statistical analysis","data processing","it procurement"]},
- {q:"What was the name of Ross’s second wife?",answers:["emily"]},
- {q:"Who was Monica’s first kiss?",answers:["ross"]},
- {q:"What is Rachel’s favorite flower?",answers:["lily","lilies"]},
- {q:"What song makes Ross and Rachel’s daughter Emma laugh?",answers:["baby got back"]},
- {q:"What is the name of Phoebe’s most famous song?",answers:["smelly cat"]},
- {q:"What is the name of Joey’s soap opera?",answers:["days of our lives"]},
- {q:"What is the name of Chandler and Monica’s twins?",answers:["jack and erica","jack erica"]},
+function tryMusic(){
+  song.volume = 0.7;
+  const p = song.play();
+  if(p !== undefined){
+    p.then(()=>{ musicStarted=true; playbtn.style.display='none'; })
+     .catch(()=>{ playbtn.style.display='block'; });
+  } else {
+    playbtn.style.display='block';
+  }
+}
+function forcePlay(){
+  song.play().then(()=>{ musicStarted = true; playbtn.style.display='none'; })
+    .catch(()=>{/* ignore */});
+}
+
+// QUIZ QUESTIONS (Friends series)
+const questions = [
+  { q: "What is the name of Ross and Monica’s childhood dog?", answers: ["chi-chi","chi chi"] },
+  { q: "What is Joey’s stuffed penguin called?", answers: ["huggsy","hugsie"] },
+  { q: "What profession is Chandler actually doing?", answers: ["statistical analysis and data reconfiguration","it procurement"] },
+  { q: "What is the name of Ross’ second wife?", answers: ["emily"] },
+  { q: "Who was Monica’s first kiss ever?", answers: ["ross"] },
+  { q: "What is Rachel’s favourite flower?", answers: ["lily","lilies"] },
+  { q: "Which song made baby Emma laugh?", answers: ["baby got back"] },
+  { q: "What is the name of Phoebe’s most famous song?", answers: ["smelly cat"] },
+  { q: "What is the name of Joey’s soap opera character show?", answers: ["days of our lives"] },
+  { q: "What is Chandler and Monica’s twins’ names?", answers: ["jack and erica","jack erica"] }
+];
+let idx = 0;
+
+const backgrounds = [
+  "https://i.imgur.com/If8TZ4g.jpg",  // example FRIENDS group
+  "https://i.imgur.com/3UdkUYk.jpg",  // Central Perk
+  "https://i.imgur.com/rZ1Z0b5.jpg",  // Monica & Chandler apartment
+  "https://i.imgur.com/8gI6m0h.jpg",  // Joey’s apartment
+  "https://i.imgur.com/2K9YQl3.jpg",  // Ross museum / dinosaur
+  "https://i.imgur.com/d6yuLZP.jpg"   // Phoebe guitar / Cental Perk stage
 ];
 
-let i=0;
-function showQuestion(){document.getElementById("qtext").textContent=questions[i].q;
-document.getElementById("answer").value='';document.getElementById("feedback").textContent='';}
-function norm(s){return (s||"").trim().toLowerCase();}
-function check(){
- const a=norm(document.getElementById("answer").value);
- const ok=questions[i].answers.map(x=>x.toLowerCase());
- if(ok.includes(a)){
-   i++;
-   if(i>=questions.length){
-     document.getElementById("quiz").style.display="none";
-     document.getElementById("final").style.display="block";
-     if(!playing)forcePlay();
-     hearts();
-   }else showQuestion();
- }else document.getElementById("feedback").textContent="Try again 👀";
+// APPLY BACKGROUND per question
+function applyBackground(){
+  const area = document.getElementById('quiz-area');
+  const bg = backgrounds[idx % backgrounds.length];
+  area.style.background = `linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('${bg}') center/cover no-repeat fixed`;
 }
 
-/* Hearts animation */
-function hearts(){
- const c=document.getElementById("hearts"),ctx=c.getContext("2d");
- const DPR=window.devicePixelRatio||1;c.width=innerWidth*DPR;c.height=innerHeight*DPR;c.style.width=innerWidth+"px";c.style.height=innerHeight+"px";ctx.scale(DPR,DPR);
- const arr=Array.from({length:60}).map(()=>({x:Math.random()*innerWidth,y:-Math.random()*innerHeight,s:Math.random()*20+8,v:Math.random()*1.8+.8,color:`hsl(${Math.random()*30+330},80%,60%)`}));
- function draw(x,y,s,color){ctx.save();ctx.fillStyle=color;ctx.beginPath();const t=s*.3;ctx.moveTo(x,y+t);
- ctx.bezierCurveTo(x,y,x-s/2,y,x-s/2,y+t);ctx.bezierCurveTo(x-s/2,y+(s+t)/2,x,y+(s+t)/1.3,x,y+s);
- ctx.bezierCurveTo(x,y+(s+t)/1.3,x+s/2,y+(s+t)/2,x+s/2,y+t);ctx.bezierCurveTo(x+s/2,y,x,y,x,y+t);ctx.closePath();ctx.fill();ctx.restore();}
- function frame(){ctx.clearRect(0,0,c.width,c.height);for(const h of arr){draw(h.x,h.y,h.s,h.color);h.y+=h.v;h.x+=Math.sin(h.y/25)*.6;if(h.y>innerHeight+h.s){h.y=-h.s;h.x=Math.random()*innerWidth;}}requestAnimationFrame(frame);}frame();
+// SHOW QUESTION
+function showQuestion(){
+  applyBackground();
+  document.getElementById('qtext').textContent = questions[idx].q;
+  document.getElementById('answer').value = "";
+  document.getElementById('feedback').textContent = "";
+  document.getElementById('answer').focus();
 }
 
-window.onload=function(){tryPlay();showQuestion();}
+// NORMALIZE
+function norm(s){ return (s||"").trim().toLowerCase(); }
+
+// CHECK ANSWER
+function checkAnswer(){
+  const user = norm(document.getElementById('answer').value);
+  const ok = questions[idx].answers.map(a => a.toLowerCase().trim());
+  if(ok.includes(user)){
+    idx++;
+    if(idx >= questions.length){
+      document.getElementById('quiz').style.display = 'none';
+      document.getElementById('final').style.display = 'block';
+      if(!musicStarted) forcePlay();
+      startHearts();
+    } else {
+      showQuestion();
+    }
+  } else {
+    document.getElementById('feedback').textContent = "Try again 👀";
+  }
+}
+
+// HEARTS ANIMATION
+function startHearts(){
+  const canvas = document.getElementById('hearts');
+  const ctx = canvas.getContext('2d');
+  const DPR = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * DPR;
+  canvas.height = window.innerHeight * DPR;
+  canvas.style.width  = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  ctx.scale(DPR, DPR);
+  const hearts = Array.from({length:60}).map(_=>({
+    x: Math.random()*window.innerWidth,
+    y: -Math.random()*window.innerHeight,
+    size: Math.random()*20+8,
+    speed: Math.random()*1.8+0.8,
+    color: `hsl(${Math.random()*40+320},80%,60%)`
+  }));
+  function drawHeart(x,y,s,c){
+    ctx.save();
+    ctx.fillStyle=c;
+    ctx.beginPath();
+    const t=s*0.3;
+    ctx.moveTo(x,y+t);
+    ctx.bezierCurveTo(x,y,x-s/2,y,x-s/2,y+t);
+    ctx.bezierCurveTo(x-s/2, y+(s+t)/2, x, y+(s+t)/1.3, x,y+s);
+    ctx.bezierCurveTo(x,y+(s+t)/1.3, x+s/2, y+(s+t)/2, x+s/2, y+t);
+    ctx.bezierCurveTo(x+s/2, y, x, y, x, y+t);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(const h of hearts){
+      drawHeart(h.x,h.y,h.size,h.color);
+      h.y += h.speed;
+      h.x += Math.sin(h.y/35)*0.6;
+      if(h.y > window.innerHeight + h.size){
+        h.y = -h.size;
+        h.x = Math.random()*window.innerWidth;
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// INIT
+window.onload = function(){
+  tryMusic();
+  showQuestion();
+}
 </script>
 </body>
 </html>
