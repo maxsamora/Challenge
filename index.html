@@ -1,291 +1,113 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Hack My Heart ❤️</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    :root { --green: #00ff7f; --pink: #e91e63; }
-    html, body { margin:0; height:100%; }
-    body { font-family: "Courier New", monospace; background:#000; color:var(--green); }
-
-    /* TERMINAL SCREEN */
-    #terminal {
-      white-space: pre-wrap;
-      padding: 24px;
-      font-size: 1rem;
-      line-height: 1.5;
-      min-height: 100vh;
-      background: #000;
-    }
-
-    /* QUIZ SCREEN */
-    #quiz-container {
-      display: none;
-      min-height: 100vh;
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      padding: 40px 16px 80px;
-      box-sizing: border-box;
-    }
-    .panel {
-      max-width: 720px;
-      margin: 0 auto;
-      background: rgba(0,0,0,.4);
-      border: 1px solid rgba(0,255,127,.2);
-      border-radius: 10px;
-      padding: 20px;
-    }
-    h1 { margin-top:0; }
-    .question { margin-bottom: 14px; }
-    input[type="text"] {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #111;
-      color: #fff;
-      font-size: 1rem;
-    }
-    button {
-      background: var(--pink);
-      color: #fff;
-      border: none;
-      padding: 9px 14px;
-      border-radius: 6px;
-      margin-top: 12px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    #feedback { margin-top: 10px; color: #ffb3b3; font-weight: bold; }
-
-    /* FINAL SCREEN */
-    #final {
-      display: none;
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    /* HEART CANVAS */
-    #hearts {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    /* PLAY BUTTON (when autoplay blocked) */
-    #playbtn {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      background: rgba(0,0,0,.7);
-      color: #fff;
-      border: 1px solid #fff;
-      border-radius: 6px;
-      padding: 8px 12px;
-      cursor: pointer;
-      display: none;
-      z-index: 10000;
-      font-family: Arial, sans-serif;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Friends Quiz — Secret Admirer 💐</title>
+<style>
+  :root {
+    --accent:#ffdd57;
+    --pink:#e1306c;
+  }
+  html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:#111;color:#fff;}
+  header{text-align:center;padding:24px 8px;font-family:'Trebuchet MS';letter-spacing:4px;}
+  header span{color:var(--accent);}
+  #game{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:calc(100vh - 80px);
+    background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.6)),url('bg-friends.jpg') center/cover no-repeat;
+    padding:20px;box-sizing:border-box;
+  }
+  .card{background:rgba(0,0,0,.65);padding:24px;border-radius:12px;max-width:720px;width:100%;box-shadow:0 0 30px rgba(0,0,0,.5);}
+  h1{margin-top:0;text-align:center;}
+  p{color:#ddd;}
+  .q{margin-bottom:12px;font-size:1.05rem;}
+  input{width:100%;padding:10px;border-radius:8px;border:none;background:#222;color:#fff;font-size:1rem;}
+  button{margin-top:12px;padding:10px 18px;background:var(--pink);color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
+  #feedback{color:#ffb3b3;margin-top:8px;}
+  #final{display:none;text-align:center;}
+  #insta{display:inline-block;margin-top:16px;padding:12px 18px;background:var(--accent);color:#000;border-radius:8px;text-decoration:none;font-weight:bold;}
+  canvas#hearts{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+  #playbtn{position:fixed;right:16px;bottom:16px;background:rgba(0,0,0,.7);color:#fff;border:1px solid #555;border-radius:8px;padding:10px 12px;cursor:pointer;display:none;z-index:10000;}
+</style>
 </head>
 <body>
-  <!-- hacker intro -->
-  <div id="terminal"></div>
+<header><h2>F R I E N D S <span>Quiz</span></h2></header>
 
-  <!-- quiz -->
-  <div id="quiz-container">
-    <div class="panel">
-      <h1>🎯 Hack Game</h1>
-      <p>Answer all questions to find out who sent you the flowers.</p>
-      <div id="quiz">
-        <div class="question" id="qtext"></div>
-        <input id="answer" type="text" placeholder="type your answer..." autocomplete="off" />
-        <br>
-        <button onclick="checkAnswer()">Submit</button>
-        <p id="feedback"></p>
-      </div>
-      <div id="final">
-        <h2>💖 You hacked my heart!</h2>
-        <p>It was me — <strong>Maxwell</strong> 💌</p>
-      </div>
+<div id="game">
+  <div class="card">
+    <h1>Hey Solène!</h1>
+    <p>Can you prove you’re a true <strong>Friends</strong> fan?  
+    Answer all questions to reveal who sent you these flowers 💐</p>
+
+    <div id="quiz">
+      <div class="q" id="qtext"></div>
+      <input id="answer" type="text" placeholder="Type your answer..." autocomplete="off" />
+      <button onclick="check()">Submit</button>
+      <p id="feedback"></p>
+    </div>
+
+    <div id="final">
+      <h2>🎉 You did it!</h2>
+      <p>It was me — <strong>Maxwell</strong> 💌</p>
+      <a id="insta" href="https://instagram.com/YOUR_INSTAGRAM" target="_blank">Visit my Instagram</a>
     </div>
   </div>
+</div>
 
-  <!-- music -->
-  <audio id="song" src="onedance.mp3" preload="auto" loop></audio>
-  <!-- hearts -->
-  <canvas id="hearts"></canvas>
-  <!-- fallback button -->
-  <button id="playbtn" onclick="forcePlay()">Play music</button>
+<audio id="song" src="onedance.mp3" preload="auto" loop></audio>
+<button id="playbtn" onclick="forcePlay()">Play music</button>
+<canvas id="hearts"></canvas>
 
 <script>
-/* =============== TERMINAL INTRO =============== */
-const introLines = [
-  "happy day, solène delacourt...",
-  "how about we play a game to discover who your secret admirer is...",
-  "after you hack this game you'll know who sent you these flowers.",
-  "",
-  "initializing love-terminal...",
-  "bypassing romantic firewall...",
-  "decrypting feelings...",
-  "access granted."
+const song=document.getElementById("song"),btn=document.getElementById("playbtn");let playing=false;
+function tryPlay(){song.volume=0.7;const p=song.play();if(p!==undefined){p.then(()=>{playing=true;btn.style.display="none"}).catch(()=>{btn.style.display="block"})}}
+function forcePlay(){song.play().then(()=>{playing=true;btn.style.display="none"}).catch(()=>{})}
+
+/* FRIENDS QUIZ QUESTIONS */
+const questions=[
+ {q:"What is the name of Ross and Monica’s dog when they were kids?",answers:["chi-chi","chi chi"]},
+ {q:"What is the name of Joey’s stuffed penguin?",answers:["huggsy","hugsie"]},
+ {q:"What does Chandler do for a living?",answers:["statistical analysis","data processing","it procurement"]},
+ {q:"What was the name of Ross’s second wife?",answers:["emily"]},
+ {q:"Who was Monica’s first kiss?",answers:["ross"]},
+ {q:"What is Rachel’s favorite flower?",answers:["lily","lilies"]},
+ {q:"What song makes Ross and Rachel’s daughter Emma laugh?",answers:["baby got back"]},
+ {q:"What is the name of Phoebe’s most famous song?",answers:["smelly cat"]},
+ {q:"What is the name of Joey’s soap opera?",answers:["days of our lives"]},
+ {q:"What is the name of Chandler and Monica’s twins?",answers:["jack and erica","jack erica"]},
 ];
-const terminal = document.getElementById('terminal');
-let introIndex = 0;
 
-function typeIntro() {
-  if (introIndex < introLines.length) {
-    terminal.textContent += introLines[introIndex] + "\n";
-    introIndex++;
-    setTimeout(typeIntro, 1100);
-  } else {
-    setTimeout(() => {
-      // show quiz
-      document.getElementById('terminal').style.display = "none";
-      document.getElementById('quiz-container').style.display = "block";
-      showQuestion();
-    }, 700);
-  }
+let i=0;
+function showQuestion(){document.getElementById("qtext").textContent=questions[i].q;
+document.getElementById("answer").value='';document.getElementById("feedback").textContent='';}
+function norm(s){return (s||"").trim().toLowerCase();}
+function check(){
+ const a=norm(document.getElementById("answer").value);
+ const ok=questions[i].answers.map(x=>x.toLowerCase());
+ if(ok.includes(a)){
+   i++;
+   if(i>=questions.length){
+     document.getElementById("quiz").style.display="none";
+     document.getElementById("final").style.display="block";
+     if(!playing)forcePlay();
+     hearts();
+   }else showQuestion();
+ }else document.getElementById("feedback").textContent="Try again 👀";
 }
 
-/* =============== MUSIC AUTOPLAY =============== */
-const song = document.getElementById('song');
-const playbtn = document.getElementById('playbtn');
-let musicStarted = false;
-
-function tryPlayMusic() {
-  song.volume = 0.7;
-  const p = song.play();
-  if (p !== undefined) {
-    p.then(() => {
-      musicStarted = true;
-      playbtn.style.display = "none";
-    }).catch(() => {
-      // autoplay blocked
-      playbtn.style.display = "block";
-    });
-  } else {
-    playbtn.style.display = "block";
-  }
+/* Hearts animation */
+function hearts(){
+ const c=document.getElementById("hearts"),ctx=c.getContext("2d");
+ const DPR=window.devicePixelRatio||1;c.width=innerWidth*DPR;c.height=innerHeight*DPR;c.style.width=innerWidth+"px";c.style.height=innerHeight+"px";ctx.scale(DPR,DPR);
+ const arr=Array.from({length:60}).map(()=>({x:Math.random()*innerWidth,y:-Math.random()*innerHeight,s:Math.random()*20+8,v:Math.random()*1.8+.8,color:`hsl(${Math.random()*30+330},80%,60%)`}));
+ function draw(x,y,s,color){ctx.save();ctx.fillStyle=color;ctx.beginPath();const t=s*.3;ctx.moveTo(x,y+t);
+ ctx.bezierCurveTo(x,y,x-s/2,y,x-s/2,y+t);ctx.bezierCurveTo(x-s/2,y+(s+t)/2,x,y+(s+t)/1.3,x,y+s);
+ ctx.bezierCurveTo(x,y+(s+t)/1.3,x+s/2,y+(s+t)/2,x+s/2,y+t);ctx.bezierCurveTo(x+s/2,y,x,y,x,y+t);ctx.closePath();ctx.fill();ctx.restore();}
+ function frame(){ctx.clearRect(0,0,c.width,c.height);for(const h of arr){draw(h.x,h.y,h.s,h.color);h.y+=h.v;h.x+=Math.sin(h.y/25)*.6;if(h.y>innerHeight+h.s){h.y=-h.s;h.x=Math.random()*innerWidth;}}requestAnimationFrame(frame);}frame();
 }
 
-function forcePlay() {
-  song.play().then(() => {
-    musicStarted = true;
-    playbtn.style.display = "none";
-  }).catch(() => {
-    // if still blocked we leave the button
-  });
-}
-
-/* =============== QUIZ LOGIC =============== */
-const questions = [
-  { q: "What is my country of origin?", answers: ["brazil","brasil"] },
-  { q: "Where do I live currently?", answers: ["sydney"] },
-  { q: "How many siblings do I have?", answers: ["3","three"] },
-  { q: "What is my favorite color?", answers: ["red","vermelha"] },
-  { q: "What was the first gift you got from me?", answers: ["friends socks","socks friends","meia friends","friends sock"] },
-  { q: "What is the color of my body?", answers: ["brown"] },
-  { q: "What is the first word that comes to your mind when you think of me?", answers: ["gostoso"] },
-  { q: "Which song reminds you of me?", answers: ["one dance","drake one dance"] }
-];
-let current = 0;
-
-function showQuestion() {
-  document.getElementById('qtext').textContent = questions[current].q;
-  document.getElementById('answer').value = "";
-  document.getElementById('answer').focus();
-  document.getElementById('feedback').textContent = "";
-}
-
-function normalize(str) {
-  return (str || "").trim().toLowerCase();
-}
-
-function checkAnswer() {
-  const user = normalize(document.getElementById('answer').value);
-  const valid = questions[current].answers.map(a => a.toLowerCase().trim());
-
-  if (valid.includes(user)) {
-    current++;
-    if (current >= questions.length) {
-      // end
-      document.getElementById('quiz').style.display = "none";
-      document.getElementById('final').style.display = "block";
-      if (!musicStarted) {
-        forcePlay();
-      }
-      startHearts();
-    } else {
-      showQuestion();
-    }
-  } else {
-    document.getElementById('feedback').textContent = "Try again 👀";
-  }
-}
-
-/* =============== HEARTS ANIMATION =============== */
-function startHearts() {
-  const canvas = document.getElementById('hearts');
-  const ctx = canvas.getContext('2d');
-  const DPR = window.devicePixelRatio || 1;
-  canvas.width = window.innerWidth * DPR;
-  canvas.height = window.innerHeight * DPR;
-  canvas.style.width = window.innerWidth + "px";
-  canvas.style.height = window.innerHeight + "px";
-  ctx.scale(DPR, DPR);
-
-  const hearts = Array.from({length: 50}).map(() => ({
-    x: Math.random() * window.innerWidth,
-    y: -Math.random() * window.innerHeight,
-    size: Math.random() * 18 + 10,
-    speed: Math.random() * 1.8 + 0.8,
-    color: "hsl(" + (Math.random()*30+330) + ", 80%, 60%)"
-  }));
-
-  function drawHeart(x,y,size,color) {
-    ctx.save();
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    const top = size * 0.3;
-    ctx.moveTo(x, y + top);
-    ctx.bezierCurveTo(x, y, x - size/2, y, x - size/2, y + top);
-    ctx.bezierCurveTo(x - size/2, y + (size+top)/2, x, y + (size+top)/1.3, x, y + size);
-    ctx.bezierCurveTo(x, y + (size+top)/1.3, x + size/2, y + (size+top)/2, x + size/2, y + top);
-    ctx.bezierCurveTo(x + size/2, y, x, y, x, y + top);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function frame() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for (const h of hearts) {
-      drawHeart(h.x, h.y, h.size, h.color);
-      h.y += h.speed;
-      h.x += Math.sin(h.y/25) * 0.6;
-      if (h.y > window.innerHeight + h.size) {
-        h.y = -h.size;
-        h.x = Math.random() * window.innerWidth;
-      }
-    }
-    requestAnimationFrame(frame);
-  }
-  frame();
-}
-
-/* =============== INIT =============== */
-window.onload = function() {
-  tryPlayMusic();  // try from start
-  typeIntro();     // start hacker text
-};
+window.onload=function(){tryPlay();showQuestion();}
 </script>
 </body>
 </html>
